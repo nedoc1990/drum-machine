@@ -3,6 +3,7 @@ import "./App.css";
 
 const Button = ({ letter, playing, audio, handleClick, transitionEnd }) => (
   <div
+    id={audio}
     className={`drum-pad ${playing ? "playing" : ""}`}
     data-key={letter}
     onClick={handleClick}
@@ -10,7 +11,7 @@ const Button = ({ letter, playing, audio, handleClick, transitionEnd }) => (
   >
     <audio
       id={letter}
-      src={`https://s3.amazonaws.com/freecodecamp/drums/${audio}`}
+      src={`https://s3.amazonaws.com/freecodecamp/drums/${audio}.mp3`}
       className="clip"
     />
     {letter}
@@ -21,15 +22,15 @@ class App extends Component {
   state = {
     letters: ["Q", "W", "E", "A", "S", "D", "Z", "X", "C"],
     audios: [
-      "Chord_1.mp3",
-      "Chord_2.mp3",
-      "Chord_3.mp3",
-      "Give_us_a_light.mp3",
-      "Dry_Ohh.mp3",
-      "Bld_H1.mp3",
-      "punchy_kick_1.mp3",
-      "side_stick_1.mp3",
-      "Brk_Snr.mp3"
+      "Chord_1",
+      "Chord_2",
+      "Chord_3",
+      "Give_us_a_light",
+      "Dry_Ohh",
+      "Bld_H1",
+      "punchy_kick_1",
+      "side_stick_1",
+      "Brk_Snr"
     ],
     playing: {
       Q: false,
@@ -42,7 +43,8 @@ class App extends Component {
       X: false,
       C: false
     },
-    volume: 0.5
+    volume: 0.5,
+    lastPlayed: ""
   };
 
   componentDidMount() {
@@ -59,12 +61,15 @@ class App extends Component {
     audio.currentTime = 0;
     audio.volume = this.state.volume;
     audio.play();
+    const audioIndex = this.state.letters.findIndex(l => l === letter);
+    const played = this.state.audios[audioIndex];
 
     this.setState({
       playing: {
         ...this.state.playing,
         [letter]: true
-      }
+      },
+      lastPlayed: played
     });
   };
 
@@ -90,7 +95,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="drum-machine">
+        <div id="drum-machine" className="drum-machine">
           <div className="display">
             {this.state.letters.map((letter, index) => {
               return (
@@ -117,6 +122,8 @@ class App extends Component {
               step="0.01"
               onChange={this.changeVolume}
             />
+
+            <p id="display">{this.state.lastPlayed}</p>
           </div>
         </div>
       </div>
