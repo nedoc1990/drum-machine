@@ -53,8 +53,13 @@ body {
 .controls {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: flex-start;
   align-items: center;
+}
+
+#display {
+  font-size: 18px;
 }
 
 @media (max-width: 500px) {
